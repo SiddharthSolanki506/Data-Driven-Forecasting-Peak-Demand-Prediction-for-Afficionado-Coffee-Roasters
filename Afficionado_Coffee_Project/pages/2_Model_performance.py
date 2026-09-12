@@ -21,11 +21,12 @@ st.divider()
 # Load Files
 # --------------------------------------
 
-importance_df = pd.read_csv("feature_importance.csv")
+BASE_DIR = Path(__file__).resolve().parent.parent
 
-with open("metrics.json") as f:
+importance_df = pd.read_csv(BASE_DIR / "feature_importance.csv")
+
+with open(BASE_DIR / "metrics.json", "r") as f:
     metrics = json.load(f)
-
 # --------------------------------------
 # KPI Cards
 # --------------------------------------
