@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-
+from pathlib import Path
 st.set_page_config(
     page_title="Dataset Explorer",
     page_icon="📋",
@@ -9,8 +9,11 @@ st.set_page_config(
 
 st.title("📋 Dataset Explorer")
 
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
 df = pd.read_excel(
-    "Afficionado Coffee Roasters.xlsx"
+    BASE_DIR / "Afficionado Coffee Roasters.xlsx"
 )
 
 df["revenue"] = df["transaction_qty"] * df["unit_price"]
