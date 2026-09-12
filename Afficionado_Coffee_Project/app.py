@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import pickle
-
+from pathlib import Path
 # --------------------------------------------------
 # Page Configuration
 # --------------------------------------------------
@@ -83,7 +83,10 @@ st.divider()
 # --------------------------------------------------
 @st.cache_data
 def load_data():
-    df = pd.read_excel("Afficionado Coffee Roasters.xlsx")
+    BASE_DIR = Path(__file__).resolve().parent
+    file_path = BASE_DIR / "Afficionado Coffee Roasters.xlsx"
+
+    df = pd.read_excel(file_path)
 
     # Create Revenue Column
     df["revenue"] = df["transaction_qty"] * df["unit_price"]
