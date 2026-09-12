@@ -1,0 +1,8 @@
+Feature,Importance
+lag_24h,0.82052356
+lag_1h,0.091370486
+hour_of_day,0.04408302
+rolling_mean_3h,0.021038901
+store_id,0.011839931
+day_of_week,0.011144137
+is_weekend,0.0
