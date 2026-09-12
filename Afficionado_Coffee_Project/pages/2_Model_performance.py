@@ -21,8 +21,7 @@ st.divider()
 # Load Files
 # --------------------------------------
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-
+Path(__file__).resolve().parent.parent
 importance_df = pd.read_csv(BASE_DIR / "feature_importance.csv")
 
 with open(BASE_DIR / "metrics.json", "r") as f:
