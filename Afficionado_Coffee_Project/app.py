@@ -3,6 +3,7 @@ import pandas as pd
 import plotly.express as px
 import pickle
 from pathlib import Path
+
 # --------------------------------------------------
 # Page Configuration
 # --------------------------------------------------
@@ -83,10 +84,8 @@ st.divider()
 # --------------------------------------------------
 @st.cache_data
 def load_data():
-    BASE_DIR = Path(__file__).resolve().parent
-    file_path = BASE_DIR / "Afficionado Coffee Roasters.xlsx"
-
-    df = pd.read_excel(file_path)
+    base_dir = Path(__file__).resolve().parent
+    df = pd.read_excel(base_dir / "Afficionado Coffee Roasters.xlsx")
 
     # Create Revenue Column
     df["revenue"] = df["transaction_qty"] * df["unit_price"]
@@ -150,9 +149,11 @@ avg_order_value = filtered_df["revenue"].mean()
 # --------------------------------------------------
 
 def format_currency(value):
-    if value >= 10000000:
+    if pd.isna(value):
+        return "$0.00"
+    if value >= 1000000:
         return f"${value/1000000:.2f}M"
-    elif value >= 100000:
+    elif value >= 1000:
         return f"${value/1000:.2f}K"
     else:
         return f"${value:,.2f}"
@@ -165,7 +166,7 @@ col1.metric("💰 Revenue",format_currency(total_revenue))
 col2.metric("🧾 Transactions", f"{total_transactions:,}")
 col3.metric("🏪 Stores", total_stores)
 col4.metric("☕ Products", total_products)
-col5.metric("📦 Avg Order", f"${avg_order_value:.2f}")
+col5.metric("📦 Avg Order", format_currency(avg_order_value))
 
 
 st.markdown("---")
@@ -391,40 +392,40 @@ with col7:
 
 
 with col8:
+    with st.container(border=True):
+        st.subheader("💡 Business Insights")
 
-     with st.container(border=True):
-    
-            st.subheader("💡 Business Insights")
-    
+        if filtered_df.empty:
+            st.info("No data matches the selected filters. Please broaden your filters.")
+        else:
             best_store = (
                 filtered_df.groupby("store_location")["revenue"]
                 .sum()
                 .idxmax()
             )
-    
+
             best_category = (
                 filtered_df.groupby("product_category")["revenue"]
                 .sum()
                 .idxmax()
             )
-    
+
             best_product = (
                 filtered_df.groupby("product_type")["revenue"]
                 .sum()
                 .idxmax()
             )
-    
+
             peak_hour = (
                 filtered_df.groupby("hour")["revenue"]
                 .sum()
                 .idxmax()
             )
-    
+
             st.metric("🏪 Best Store", best_store)
             st.metric("🥇 Best Category", best_category)
             st.metric("☕ Best Product", best_product)
             st.metric("⏰ Peak Hour", f"{peak_hour}:00")
-
 
 
 st.markdown("---")
